@@ -1,4 +1,8 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:nfc_in_flutter/nfc_in_flutter.dart';
 
 void main() {
   runApp(MyApp());
@@ -51,15 +55,112 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  // _stream is a subscription to the stream returned by `NFC.read()`.
+  // The subscription is stored in state so the stream can be canceled later
+  StreamSubscription<NDEFMessage> _stream;
 
-  void _incrementCounter() {
+  // _tags is a list of scanned tags
+  NDEFMessage _tag = null;
+
+  bool _supportsNFC = false;
+
+  bool _isReading =false;
+
+  // _readNFC() calls `NFC.readNDEF()` and stores the subscription and scanned
+  // tags in state
+  void _readNFC(BuildContext context) {
     setState(() {
+      _isReading=true;
+    });
+    try {
+      // ignore: cancel_subscriptions
+      StreamSubscription<NDEFMessage> subscription = NFC.readNDEF().listen(
+              (tag) {
+            // On new tag, add it to state
+            setState(() {
+              _tag= tag;
+              log(tag.id);
+            });
+          },
+          // When the stream is done, remove the subscription from state
+          onDone: () {
+            setState(() {
+              _stream = null;
+            });
+          },
+          // Errors are unlikely to happen on Android unless the NFC tags are
+          // poorly formatted or removed too soon, however on iOS at least one
+          // error is likely to happen. NFCUserCanceledSessionException will
+          // always happen unless you call readNDEF() with the `throwOnUserCancel`
+          // argument set to false.
+          // NFCSessionTimeoutException will be thrown if the session timer exceeds
+          // 60 seconds (iOS only).
+          // And then there are of course errors for unexpected stuff. Good fun!
+          onError: (e) {
+            setState(() {
+              _stream = null;
+            });
+
+            if (!(e is NFCUserCanceledSessionException)) {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text("Error!"),
+                  content: Text(e.toString()),
+                ),
+              );
+            }
+          });
+
+      setState(() {
+        _stream = subscription;
+      });
+    } catch (err) {
+      print("error: $err");
+    }
+  }
+
+  // _stopReading() cancels the current reading stream
+  void _stopReading() {
+    _stream?.cancel();
+    setState(() {
+      _isReading=false;
+      _stream = null;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    NFC.isNDEFSupported.then((supported) {
+      setState(() {
+        _supportsNFC = true;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _stream?.cancel();
+  }
+
+
+  void _readTrueLink() {
+    setState(() {
+      _tag=null;
+      if (_stream == null) {
+        _readNFC(context);
+      } else {
+        _stopReading();
+      }
+
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      _counter++;
+
     });
   }
 
@@ -77,10 +178,12 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
+      body:
+
+      Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: Column(
+        child: (_tag!=null)?Column(
           // Column is also a layout widget. It takes a list of children and
           // arranges them vertically. By default, it sizes itself to fit its
           // children horizontally, and tries to be as tall as its parent.
@@ -97,18 +200,22 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+
+            Text(_tag.data!=null?_tag.data.toString():"no data",
             ),
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+              _tag.id.toString().compareTo("043F0D5A5A5784")==0?"vero":"Falso",
+              style: Theme.of(context).textTheme.headline5,
+            ),
+            Text(
+              _tag.payload!=null?_tag.payload.toString():"no payload",
+              style: Theme.of(context).textTheme.headline6,
             ),
           ],
-        ),
+        ):Text("vuoto"),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+      floatingActionButton: _isReading?null:FloatingActionButton(
+        onPressed: _readTrueLink,
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
