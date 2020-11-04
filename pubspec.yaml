@@ -32,9 +32,15 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
   nfc_in_flutter: ^2.0.5
-  device_info: ^0.4.1+4
-  shared_preferences: ^0.5.12+2
-  vibration: ^1.2.4
+  device_info: ^1.0.0
+  shared_preferences: ^0.5.12+4
+  vibration: ^1.7.1
+  http: ^0.12.2
+  pointycastle: ^2.0.0
+  asn1lib: ^0.8.1
+  path_provider: ^1.6.24
+  basic_utils: ^2.6.3
+
 
 
 dev_dependencies:

@@ -1,15 +1,15 @@
-import 'dart:async';
-import 'dart:developer';
-import 'dart:async';
 import 'package:flutter/services.dart';
-import 'package:flutter/services.dart' show PlatformException;
 import 'package:flutter/material.dart';
-import 'package:nfc_in_flutter/nfc_in_flutter.dart';
 import 'package:truelink/screens/product_check.dart';
 import 'globals.dart' as globals;
 import 'package:truelink/screens/intro/intro.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:truelink/localization/custom_localizations.dart';
+import 'package:http/http.dart' as ht;
+import 'package:http/io_client.dart';
+import 'dart:io';
+import 'dart:typed_data';
+
 
 void main(){
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,13 +20,18 @@ void main(){
         client: graphQLConfiguration.client,
         child: CacheProvider(child: MyApp()),
       ),*/
-        MyApp()
+        TrueLinkApp()
     );
   });
 }
 
-class MyApp extends StatefulWidget {
-  MyApp( ) ;
+HttpClient client = new HttpClient()..badCertificateCallback =
+  ((X509Certificate cert, String host, int port) => true);
+IOClient ioClient = new IOClient(client);
+
+
+class TrueLinkApp extends StatefulWidget {
+  TrueLinkApp( ) ;
 
 // This widget is the home page of your application. It is stateful, meaning
 // that it has a State object (defined below) that contains fields that affect
@@ -39,13 +44,13 @@ class MyApp extends StatefulWidget {
 
 
   @override
-  _MyApp createState() => _MyApp();
+  _TrueLinkApp createState() => _TrueLinkApp();
 
 }
 
 
 //class _MyApp extends State<MyApp> implements AuthStateListener  {
-class _MyApp extends State<MyApp>  {
+class _TrueLinkApp extends State<TrueLinkApp>  {
 
 
   @override
@@ -146,3 +151,8 @@ class _MyApp extends State<MyApp>  {
     );
   }
 }
+
+
+
+
+
