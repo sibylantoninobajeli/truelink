@@ -40,6 +40,9 @@ dependencies:
   asn1lib: ^0.8.1
   path_provider: ^1.6.24
   basic_utils: ^2.6.3
+  camera: 0.5.8+11
+  path: ^1.7.0
+
 
 
 

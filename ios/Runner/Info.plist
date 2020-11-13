@@ -41,6 +41,8 @@
 	</array>
 	<key>NFCReaderUsageDescription</key>
 	<string>Needs to read product TAG</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Take picture of products</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 </dict>
