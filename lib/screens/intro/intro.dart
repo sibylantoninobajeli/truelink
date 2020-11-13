@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:truelink/globals.dart' as globals;
@@ -8,6 +9,7 @@ import 'package:truelink/screens/auth/regstr_scr1_mail_switch.dart';
 import 'package:flutter/services.dart';
 import 'package:truelink/screens/product_check.dart';
 import 'page_selector.dart';
+import 'package:truelink/screens/take_picture.dart';
 
 /// A widget connecting its life cycle to a [VideoPlayerController] using
 /// an asset as data source
@@ -86,6 +88,30 @@ class Intro extends StatelessWidget {
     // Vecchio login
     // Navigator.of(context).pushNamed('/login');
   }
+
+
+  static Future<void>  buttonTakePictureCheck (BuildContext context) async {
+    WidgetsFlutterBinding.ensureInitialized();
+
+    // Obtain a list of the available cameras on the device.
+    final cameras = await availableCameras();
+
+    // Get a specific camera from the list of available cameras.
+    final firstCamera = cameras.first;
+
+    Navigator.of(context).push(
+      CupertinoPageRoute<void>(
+          title: "", builder: (BuildContext context) => TakePictureScreen(camera: firstCamera)),
+    );
+
+
+    //
+    // Vecchio login
+    // Navigator.of(context).pushNamed('/login');
+  }
+
+
+
   static void buttonRegistration(BuildContext context) {
     // nuovo login
 
@@ -249,6 +275,28 @@ class Intro extends StatelessWidget {
                             ),
                             child: Center(
                               child: Text(CustomLocalizations.of(context).chooserProductCheckMex,
+                                  style: globals.isaTextStyleBoldBlueVeryBig),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          key: Key('__chooseform_picturekbtn__'),
+                          onTap: () => buttonTakePictureCheck(context),
+                          child: Container(
+                            width: 200.0,
+                            height: 40.0,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border:
+                              Border.all(color: Colors.blueAccent, width: 2.0),
+                              borderRadius: BorderRadius.circular(26 / 1.5),
+                            ),
+                            child: Center(
+                              child: Text(CustomLocalizations.of(context).chooserProductPictureMex,
                                   style: globals.isaTextStyleBoldBlueVeryBig),
                             ),
                           ),
