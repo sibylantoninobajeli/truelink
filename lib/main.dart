@@ -9,6 +9,7 @@ import 'package:http/http.dart' as ht;
 import 'package:http/io_client.dart';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 void main(){
@@ -22,6 +23,7 @@ void main(){
       ),*/
         TrueLinkApp()
     );
+
   });
 }
 
@@ -64,11 +66,15 @@ class _TrueLinkApp extends State<TrueLinkApp>  {
 
     if ((!globals.isRelease)&&globals.resetDeviceStoredUser){
       globals.clearPref();
+    }else{
+
+
     }
 
     //initUniLinks();
     //globals.authStateProvider.checkLogin();
   }
+
 
 
   Image _bkgImg = new Image(

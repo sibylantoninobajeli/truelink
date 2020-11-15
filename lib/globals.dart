@@ -10,7 +10,7 @@ const bool isRelease = bool.fromEnvironment("dart.vm.product");
 ///*******************************************************************************
 ///* DEBUG ONLY SETTINGS
 ///* */
-const bool resetDeviceStoredUser = true; //
+const bool resetDeviceStoredUser = false; //
 
 /// jump to login page avoiding the intro
 const bool skipIntroPhase = false;
@@ -89,6 +89,42 @@ Future<bool> clearPref() async {
   }
   return false;
 }
+
+final prefs = SharedPreferences.getInstance();
+
+Future<String> getFingerprint() async {
+  // obtain shared preferences
+  try {
+    String fingerprint=(await prefs).getString('fingerprint');
+    localLog("found","fingerprint:"+fingerprint);
+    return fingerprint;
+  }catch(e){
+    return null;
+  }
+}
+
+Future<String> getPublicKey() async {
+  // obtain shared preferences
+  try {
+    String pubKey=(await prefs).getString('public_key');
+    localLog("found","public_key:"+pubKey);
+    return pubKey;
+  }catch(e){
+    return null;
+  }
+}
+
+savePublicKey(String pubKey,String fingerprint) async {
+  // obtain shared preferences
+  try {
+    (await prefs).setString('public_key',pubKey);
+    (await prefs).setString('fingerprint',fingerprint);
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+
 
 TextStyle isaTextStyleBoldWhiteMedium = TextStyle(
     fontFamily: "Helvetica nueue bold", fontSize: 14.0, color: Colors.white);

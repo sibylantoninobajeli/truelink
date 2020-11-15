@@ -4,16 +4,19 @@ final Map<String, Map<String, String>> localizedValues = {
 'title': "TrueLink",
   'chooserProductCheckMex': "Verifica prodotto",
   'chooserProductPictureMex': "Scatta foto",
+  'chooserKeyGenMex': "Genera chiave",
+  'chooserRegenMex': "Rigeera key",
   'tutorial1Mex1': "Tracciabilità certa",
   'tutorial1Mex2': "Qualità certa",
   'tutorial1Mex3': "TrueLink a tutela delle eccellenze alimentari",
-
 }
 ,
 'en': {
 'title': "TrueLink",
   'chooserProductCheckMex': "Product verify",
   'chooserProductPictureMex': "Take a picture",
+  'chooserKeyGenMex': "Create public key",
+  'chooserRegenMex': "Recreate key",
   'tutorial1Mex1': "True tracking",
   'tutorial1Mex2': "True quality",
   'tutorial1Mex3': "TrueLink to protect food excellence",

@@ -406,7 +406,7 @@ class OracleFabricBCWidgetState extends State<OracleFabricBCWidget> {
 
   String _requestChannelSetup(String channelId) {
     if (Platform.isAndroid)
-      return 'https://10.0.2.2:8081/setupChannel?id=' + channelId;
+      return 'https://sibylfounder-sibylit-fra.blockchain.ocp.oraclecloud.com:7443/restproxy/setupChannel?id=' + channelId;
     else // for iOS simulator
       return 'https://localhost:8081/setupChannel?id=' + channelId;
   }

@@ -1,12 +1,14 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:truelink/buttons/check_public_key.dart';
 import 'package:truelink/globals.dart' as globals;
 import 'dart:ui';
 import 'package:truelink/localization/custom_localizations.dart';
 import 'package:truelink/screens/auth/login_screen.dart';
 import 'package:truelink/screens/auth/regstr_scr1_mail_switch.dart';
 import 'package:flutter/services.dart';
+import 'package:truelink/screens/key_generator.dart';
 import 'package:truelink/screens/product_check.dart';
 import 'page_selector.dart';
 import 'package:truelink/screens/take_picture.dart';
@@ -112,6 +114,7 @@ class Intro extends StatelessWidget {
 
 
 
+
   static void buttonRegistration(BuildContext context) {
     // nuovo login
 
@@ -127,7 +130,7 @@ class Intro extends StatelessWidget {
 
   static final formKey = GlobalKey<FormState>();
 
-
+  bool publicKeyPresent=false;
 
   final Image _bkgImg = new Image(
     image: new AssetImage("assets/truelink_logo.png"),
@@ -302,6 +305,9 @@ class Intro extends StatelessWidget {
                           ),
                         ),
                       ),
+
+                   BtnCheckKey()
+
                     ],
                   ),
                 ),
