@@ -67,8 +67,8 @@ class _TrueLinkApp extends State<TrueLinkApp>  {
     if ((!globals.isRelease)&&globals.resetDeviceStoredUser){
       globals.clearPref();
     }else{
-
-
+      globals.getPrivateRsaKeys();
+      globals.getPublicRsaKeys();
     }
 
     //initUniLinks();

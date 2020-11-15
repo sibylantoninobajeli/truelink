@@ -1,12 +1,8 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:truelink/globals.dart' as globals;
 import 'package:truelink/localization/custom_localizations.dart';
-
-import 'package:truelink/screens/key_generator.dart';
-
-import '../globals.dart';
+import '../screens/key_generator.dart';
 
 class BtnCheckKey extends StatefulWidget {
   BtnCheckKey();
@@ -15,7 +11,7 @@ class BtnCheckKey extends StatefulWidget {
 }
 
 class _BtnCheckKey extends State<BtnCheckKey> {
-  bool publicKeyPresent = false;
+  bool publicKeyPresent,privateKeyPresent = false;
 
   String fingerPrint;
   @override
@@ -26,29 +22,15 @@ class _BtnCheckKey extends State<BtnCheckKey> {
       fingerPrint=value
     });
 
-    globals.getPublicKey().then((value) => {
-          setState(() {
-            if (value!=null) {
-              publicKeyPresent =true;
-            }else{
-
-            }
-          })
-        });
+    publicKeyPresent =globals.rsaPublicKey!=null?true:false;
+    privateKeyPresent =globals.rsaPrivateKey!=null?true:false;
+            
   }
 
   static Future<void> buttonStoredObject(BuildContext context) async {
-    WidgetsFlutterBinding.ensureInitialized();
-
-    // Obtain a list of the available cameras on the device.
-    final cameras = await availableCameras();
-
-    // Get a specific camera from the list of available cameras.
-    final firstCamera = cameras.first;
-
     Navigator.of(context).push(
       CupertinoPageRoute<void>(
-          title: "", builder: (BuildContext context) => StoredObjectsScreen()),
+          title: "", builder: (BuildContext context) => KeyGeneratorScreen()),
     );
   }
 
@@ -71,7 +53,7 @@ class _BtnCheckKey extends State<BtnCheckKey> {
           child: Center(
             child: Text(
                 publicKeyPresent
-                    ? CustomLocalizations.of(context).chooserRegenMex+" "+fingerPrint
+                    ? CustomLocalizations.of(context).chooserRegenMex
                     : CustomLocalizations.of(context).chooserKeyGenMex,
                 style: globals.isaTextStyleBoldBlueVeryBig),
           ),

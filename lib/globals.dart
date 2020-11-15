@@ -1,9 +1,18 @@
 library insofoscuolapp.globals;
 import 'package:flutter/material.dart';
+import 'package:pointycastle/asymmetric/api.dart';
 import 'package:truelink/internalpushnotification_subscription.dart';
 import 'cfg_network_endpoint.dart';
 import 'package:device_info/device_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:pointycastle/api.dart' as api;
+import 'dart:async';
+import 'blockchain/rsa_pem.dart';
+import 'blockchain/crypto.dart';
+
+
+
 
 const bool isRelease = bool.fromEnvironment("dart.vm.product");
 
@@ -30,6 +39,9 @@ const String prodEndPoint = "https://infoscuolapp.appspot.com"; //for RELEASE
 const String testDevice = 'YOUR_DEVICE_ID';
 final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
 const bool isDev = !isRelease;
+
+
+
 
 String getEndPoint(){
   return isDev
@@ -90,6 +102,8 @@ Future<bool> clearPref() async {
   return false;
 }
 
+
+
 final prefs = SharedPreferences.getInstance();
 
 Future<String> getFingerprint() async {
@@ -103,22 +117,55 @@ Future<String> getFingerprint() async {
   }
 }
 
-Future<String> getPublicKey() async {
+
+RSAPublicKey rsaPublicKey;
+RSAPrivateKey rsaPrivateKey;
+
+getPublicRsaKeys() async {
   // obtain shared preferences
   try {
-    String pubKey=(await prefs).getString('public_key');
-    localLog("found","public_key:"+pubKey);
-    return pubKey;
+    String pubKeyPem=(await prefs).getString('public_key');
+    rsaPublicKey=RsaKeyHelper().parsePublicKeyFromPem(pubKeyPem);
+
+    localLog("loaded","public_key len"+pubKeyPem.length.toString()+" :"+pubKeyPem);
+    return rsaPublicKey;
   }catch(e){
     return null;
   }
 }
 
-savePublicKey(String pubKey,String fingerprint) async {
+
+getPrivateRsaKeys() async {
   // obtain shared preferences
   try {
-    (await prefs).setString('public_key',pubKey);
-    (await prefs).setString('fingerprint',fingerprint);
+    String priKeyPem=(await prefs).getString('private_key');
+    rsaPrivateKey=RsaKeyHelper().parsePrivateKeyFromPem(priKeyPem);
+
+    localLog("loaded","private_key len"+priKeyPem.length.toString()+" :"+priKeyPem);
+    return rsaPrivateKey;
+  }catch(e){
+    return null;
+  }
+}
+
+
+
+saveRsaKeys(api.AsymmetricKeyPair pair) async {
+  //rsaPrivateKey=pair.privateKey;
+  //rsaPublicKey=pair.publicKey;
+  String public_pem = encodePublicKeyToPem(pair.publicKey);
+  String private_pem = encodePrivateKeyToPem(pair.privateKey);
+  // obtain shared preferences
+  try {
+    (await prefs).setString('public_key',public_pem);
+    localLog("saved","public_key len"+public_pem.length.toString()+" :"+public_pem);
+    (await prefs).setString('private_key',private_pem);
+    localLog("saved","private_key len"+private_pem.length.toString()+" :"+private_pem);
+    //(await prefs).setString('fingerprint',fingerprint);
+
+    getPublicRsaKeys();
+    getPrivateRsaKeys();
+
     return true;
   }catch(e){
     return false;

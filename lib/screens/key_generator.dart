@@ -15,14 +15,14 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 
-class StoredObjectsScreen extends StatefulWidget {
+class KeyGeneratorScreen extends StatefulWidget {
   @override
-  StoredObjectsScreenState createState() => StoredObjectsScreenState();
+  KeyGeneratorScreenState createState() => KeyGeneratorScreenState();
 }
 
 
 
-class StoredObjectsScreenState extends State<StoredObjectsScreen> {
+class KeyGeneratorScreenState extends State<KeyGeneratorScreen> {
 
   api.AsymmetricKeyPair<api.PublicKey, api.PrivateKey> keypair;
   Digest md5str;
@@ -37,18 +37,22 @@ class StoredObjectsScreenState extends State<StoredObjectsScreen> {
     return file;
   }
 
+
   _makeKeypairRequest() async {
     try {
       var pair = await makeGenerationRequest();
       String public_pem = encodePublicKeyToPem(pair.publicKey);
+      String private_pem = encodePrivateKeyToPem(pair.privateKey);
 
-      var filepem = await _writeToFile(public_pem, "public_key.pem");
+      var filepupem = await _writeToFile(public_pem, "public_key.pem");
+      var fileprpem = await _writeToFile(private_pem, "private_key.pem");
 
       //var input = File(filepem);
       md5str = await md5
-          .bind(filepem.openRead())
+          .bind(filepupem.openRead())
           .first;
-      globals.savePublicKey(public_pem,md5str.bytes.toString());
+
+      globals.saveRsaKeys(pair);
 
 
       final Email email = Email(
@@ -57,7 +61,7 @@ class StoredObjectsScreenState extends State<StoredObjectsScreen> {
         recipients: ['abajeli.sibyl@gmail.com'],
         //cc: ['cc@example.com'],
         //bcc: ['bcc@example.com'],
-        attachmentPaths: [filepem.uri.path],
+        attachmentPaths: [filepupem.uri.path,fileprpem.uri.path],
         isHTML: false,
       );
 

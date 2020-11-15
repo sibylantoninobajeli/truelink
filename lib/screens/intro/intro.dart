@@ -1,7 +1,8 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:truelink/buttons/check_public_key.dart';
+import 'package:truelink/buttons/check_public_key_btn.dart';
+import 'package:truelink/buttons/object_browser_btn.dart';
 import 'package:truelink/globals.dart' as globals;
 import 'dart:ui';
 import 'package:truelink/localization/custom_localizations.dart';
@@ -306,7 +307,8 @@ class Intro extends StatelessWidget {
                         ),
                       ),
 
-                   BtnCheckKey()
+                   BtnCheckKey(),
+                   ObjectBrowserButton()
 
                     ],
                   ),
