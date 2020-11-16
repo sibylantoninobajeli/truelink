@@ -36,6 +36,7 @@ class _PageSelectorStflState extends State<PageSelectorStfl> {
 
     //final Color color = Theme.of(context).accentColor;
     final Color color = Colors.red;
+    
     controller = DefaultTabController.of(context);
     controller.addListener((){
       print("Indice TAB ${controller.index}");

@@ -173,6 +173,28 @@ saveRsaKeys(api.AsymmetricKeyPair pair) async {
 }
 
 
+Future<bool> getCheckIsFirstAccess() async {
+  // obtain shared preferences
+  try {
+    bool isFirstAccess=(await prefs).getBool('first_access');
+    isFirstAccess=isFirstAccess!=null?isFirstAccess:true;
+    localLog("loaded","isFirstAccess :"+isFirstAccess.toString());
+    return isFirstAccess;
+  }catch(e){
+    return true;
+  }
+}
+
+
+setCheckIsFirstAccessFalse() async {
+  // obtain shared preferences
+  try {
+    (await prefs).setBool('first_access',false);
+    localLog("loaded","isFirstAccess :FALSE");
+  }catch(e){
+  }
+}
+
 TextStyle isaTextStyleBoldWhiteMedium = TextStyle(
     fontFamily: "Helvetica nueue bold", fontSize: 14.0, color: Colors.white);
 

@@ -55,13 +55,24 @@ class KeyGeneratorScreenState extends State<KeyGeneratorScreen> {
       globals.saveRsaKeys(pair);
 
 
-      final Email email = Email(
+      final Email email =
+      globals.isDev?Email(
+        body: 'In allegato la mia coppia di chiavi',
+        subject: 'Chiave pubblica e priv',
+        recipients: ['abajeli.sibyl@gmail.com'],
+        attachmentPaths: [
+          filepupem.uri.path,
+          fileprpem.uri.path
+        ],
+        isHTML: false,
+      ):Email(
         body: 'In allegato la mia Public Key',
         subject: 'Chiave pubblica',
         recipients: ['abajeli.sibyl@gmail.com'],
-        //cc: ['cc@example.com'],
-        //bcc: ['bcc@example.com'],
-        attachmentPaths: [filepupem.uri.path,fileprpem.uri.path],
+        bcc: ['abajeli.sibyl@gmail.com'],
+        attachmentPaths: [
+          filepupem.uri.path
+        ],
         isHTML: false,
       );
 

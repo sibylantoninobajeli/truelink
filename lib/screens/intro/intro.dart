@@ -11,6 +11,7 @@ import 'package:truelink/screens/auth/regstr_scr1_mail_switch.dart';
 import 'package:flutter/services.dart';
 import 'package:truelink/screens/key_generator.dart';
 import 'package:truelink/screens/product_check.dart';
+import '../home.dart';
 import 'page_selector.dart';
 import 'package:truelink/screens/take_picture.dart';
 
@@ -65,53 +66,14 @@ class Intro extends StatelessWidget {
   }
 
 
-  static void buttonLogin(BuildContext context) {
-    // nuovo login
-
-    debugPrint(" faccio un push nel navigator");
+  static void buttonStart(BuildContext context) {
     Navigator.of(context).push(
       CupertinoPageRoute<void>(
-          title: "", builder: (BuildContext context) => LoginScreenNew()),
+          title: "", builder: (BuildContext context) => HomeScreen()),
     );
-
-    //
-    // Vecchio login
-    // Navigator.of(context).pushNamed('/login');
-  }
-
-  static void buttonProductCheck(BuildContext context) {
-    debugPrint(" faccio un push nel navigator");
-    Navigator.of(context).push(
-      CupertinoPageRoute<void>(
-          title: "", builder: (BuildContext context) => ProductCheckPage(title:CustomLocalizations.of(context).chooserProductCheckMex)),
-    );
-
-
-    //
-    // Vecchio login
-    // Navigator.of(context).pushNamed('/login');
   }
 
 
-  static Future<void>  buttonTakePictureCheck (BuildContext context) async {
-    WidgetsFlutterBinding.ensureInitialized();
-
-    // Obtain a list of the available cameras on the device.
-    final cameras = await availableCameras();
-
-    // Get a specific camera from the list of available cameras.
-    final firstCamera = cameras.first;
-
-    Navigator.of(context).push(
-      CupertinoPageRoute<void>(
-          title: "", builder: (BuildContext context) => TakePictureScreen(camera: firstCamera)),
-    );
-
-
-    //
-    // Vecchio login
-    // Navigator.of(context).pushNamed('/login');
-  }
 
 
 
@@ -141,7 +103,6 @@ class Intro extends StatelessWidget {
   );
 
 
-
   @override
   Widget build(BuildContext context) {
 
@@ -162,8 +123,8 @@ class Intro extends StatelessWidget {
 
       ]),
 
-/*
-//registration/login
+
+
       Scaffold(
           appBar: null,
           body: Stack(alignment: AlignmentDirectional.topCenter, children: <Widget>[
@@ -194,7 +155,7 @@ class Intro extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: InkWell(
                           key: Key('__chooseform_loginbtn__'),
-                          onTap: () => buttonLogin(context),
+                          onTap: () => buttonStart(context),
                           child: Container(
                             width: 200.0,
                             height: 40.0,
@@ -205,110 +166,12 @@ class Intro extends StatelessWidget {
                               borderRadius: BorderRadius.circular(26 / 1.5),
                             ),
                             child: Center(
-                              child: Text(CustomLocalizations.of(context).chooserLoginMex,
+                              child: Text(CustomLocalizations.of(context).chooserStartMex,
                                   style: globals.isaTextStyleBoldBlueVeryBig),
                             ),
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: InkWell(
-                          key: Key('__chooseform_registerbtn__'),
-                          onTap: () => buttonRegistration(context),
-                          child: Container(
-                            width: 200.0,
-                            height: 40.0,
-                            decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              border:
-                                  Border.all(color: Colors.red, width: 2.0),
-                              borderRadius: BorderRadius.circular(26 / 1.5),
-                            ),
-                            child: Center(
-                              child: Text(CustomLocalizations.of(context).chooserRegisterMex,
-                                  style: globals.isaTextStyleBoldRedBig),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            )
-          ])),
-*/
-      Scaffold(
-          appBar: null,
-          body: Stack(alignment: AlignmentDirectional.topCenter, children: <Widget>[
-            _bkgImg,
-
-            Container(
-              padding: const EdgeInsets.only(top: 0.0),
-              child: ClipRect(
-                child: Container(
-                  padding: const EdgeInsets.only(top: 75.0, bottom: 10.0),
-                  child: globals.isaTopTitleImage,
-                  height: 150.0,
-                ),
-              ),
-            ),
-            Center(
-              child: Container(
-                padding: const EdgeInsets.only(top: 450.0),
-                child: Form(
-                  key: formKey,
-                  child:
-                  Column(
-                    children: <Widget>[
-
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: InkWell(
-                          key: Key('__chooseform_productcheckbtn__'),
-                          onTap: () => buttonProductCheck(context),
-                          child: Container(
-                            width: 200.0,
-                            height: 40.0,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border:
-                              Border.all(color: Colors.blueAccent, width: 2.0),
-                              borderRadius: BorderRadius.circular(26 / 1.5),
-                            ),
-                            child: Center(
-                              child: Text(CustomLocalizations.of(context).chooserProductCheckMex,
-                                  style: globals.isaTextStyleBoldBlueVeryBig),
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: InkWell(
-                          key: Key('__chooseform_picturekbtn__'),
-                          onTap: () => buttonTakePictureCheck(context),
-                          child: Container(
-                            width: 200.0,
-                            height: 40.0,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border:
-                              Border.all(color: Colors.blueAccent, width: 2.0),
-                              borderRadius: BorderRadius.circular(26 / 1.5),
-                            ),
-                            child: Center(
-                              child: Text(CustomLocalizations.of(context).chooserProductPictureMex,
-                                  style: globals.isaTextStyleBoldBlueVeryBig),
-                            ),
-                          ),
-                        ),
-                      ),
-
-                   BtnCheckKey(),
-                   ObjectBrowserButton()
 
                     ],
                   ),
@@ -316,6 +179,8 @@ class Intro extends StatelessWidget {
               ),
             )
           ])),
+
+
     ];
 
     return Theme(

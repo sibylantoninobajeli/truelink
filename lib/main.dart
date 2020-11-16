@@ -1,39 +1,34 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:truelink/screens/home.dart';
 import 'package:truelink/screens/product_check.dart';
 import 'globals.dart' as globals;
 import 'package:truelink/screens/intro/intro.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:truelink/localization/custom_localizations.dart';
-import 'package:http/http.dart' as ht;
 import 'package:http/io_client.dart';
 import 'dart:io';
-import 'dart:typed_data';
-import 'package:shared_preferences/shared_preferences.dart';
 
-
-void main(){
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(
-      /*GraphQLProvider(
+        /*GraphQLProvider(
         client: graphQLConfiguration.client,
         child: CacheProvider(child: MyApp()),
       ),*/
-        TrueLinkApp()
-    );
-
+        TrueLinkApp());
   });
 }
 
-HttpClient client = new HttpClient()..badCertificateCallback =
-  ((X509Certificate cert, String host, int port) => true);
+HttpClient client = new HttpClient()
+  ..badCertificateCallback =
+      ((X509Certificate cert, String host, int port) => true);
 IOClient ioClient = new IOClient(client);
 
-
 class TrueLinkApp extends StatefulWidget {
-  TrueLinkApp( ) ;
+  TrueLinkApp();
 
 // This widget is the home page of your application. It is stateful, meaning
 // that it has a State object (defined below) that contains fields that affect
@@ -44,29 +39,31 @@ class TrueLinkApp extends StatefulWidget {
 // used by the build method of the State. Fields in a Widget subclass are
 // always marked "final".
 
-
   @override
   _TrueLinkApp createState() => _TrueLinkApp();
-
 }
 
-
-//class _MyApp extends State<MyApp> implements AuthStateListener  {
-class _TrueLinkApp extends State<TrueLinkApp>  {
-
+class _TrueLinkApp extends State<TrueLinkApp> {
+  bool firstAccess = false;
 
   @override
   void initState() {
-    final String _methodName="initState";
+    final String _methodName = "initState";
     // TODO: implement initState
     super.initState();
     //globals.authStateProvider.subscribe(this);
     // permette di mostrare le Status Icons del telefono
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
-    if ((!globals.isRelease)&&globals.resetDeviceStoredUser){
+    globals.getCheckIsFirstAccess().then((isFirst) {
+      setState(() {
+        firstAccess = isFirst;
+      });
+    });
+
+    if ((!globals.isRelease) && globals.resetDeviceStoredUser) {
       globals.clearPref();
-    }else{
+    } else {
       globals.getPrivateRsaKeys();
       globals.getPublicRsaKeys();
     }
@@ -75,15 +72,12 @@ class _TrueLinkApp extends State<TrueLinkApp>  {
     //globals.authStateProvider.checkLogin();
   }
 
-
-
   Image _bkgImg = new Image(
     image: new AssetImage("assets/truelink_logo.png"),
     fit: BoxFit.none,
     color: Colors.white70,
     colorBlendMode: BlendMode.dstOut,
   );
-
 
   // This widget is the root of your application.
   @override
@@ -100,15 +94,18 @@ class _TrueLinkApp extends State<TrueLinkApp>  {
         CustomLocalizationsDelegate(),
         const FallbackCupertinoLocalisationsDelegate(),
 
-        GlobalMaterialLocalizations.delegate,// serve pr fare funzionare il form registration
+        GlobalMaterialLocalizations
+            .delegate, // serve pr fare funzionare il form registration
         GlobalWidgetsLocalizations.delegate,
       ],
-      localeResolutionCallback: (Locale locale, Iterable<Locale> supportedLocales) {
+      localeResolutionCallback:
+          (Locale locale, Iterable<Locale> supportedLocales) {
         //globals.localLog(runtimeType.toString()+"::"+_methodName, "localeResolutionCallback>Device locale  "+locale.languageCode+' '+locale.countryCode);
-        globals.languageCode=locale.languageCode;
+        globals.languageCode = locale.languageCode;
 
         for (Locale supportedLocale in supportedLocales) {
-          if (supportedLocale.languageCode == locale.languageCode || supportedLocale.countryCode == locale.countryCode) {
+          if (supportedLocale.languageCode == locale.languageCode ||
+              supportedLocale.countryCode == locale.countryCode) {
             //if (needDebug) globals.localLog(runtimeType.toString()+"::"+_methodName,  'returning '+supportedLocale.languageCode);
             return supportedLocale;
           }
@@ -135,7 +132,7 @@ class _TrueLinkApp extends State<TrueLinkApp>  {
       // home: ProductCheckPage(title: 'TRuelink demo page'),
 
       initialRoute: '/',
-      routes:   <String, WidgetBuilder>{
+      routes: <String, WidgetBuilder>{
         // Shown when launched with plain intent.
         //'/': (BuildContext _context) => _screen,
         /*
@@ -147,18 +144,14 @@ class _TrueLinkApp extends State<TrueLinkApp>  {
         )
         :((globals.authStateProvider.getCurrAuthState()==AuthState.LOGGED_OUT)?Intro():_screen),
 */
-        '/':  (BuildContext _context) => Intro(),
+        '/': (BuildContext _context) => firstAccess ? Intro() : HomeScreen(),
         '/intro': (BuildContext _context) => Intro(),
+        '/home': (BuildContext _context) => HomeScreen(),
         '/principal': (BuildContext _context) => ProductCheckPage(),
         // Shown when launched with known deep link.
-        '/reg': (BuildContext _context) => Scaffold(body: new Center(child: new Text('Invite'))),
-
+        '/reg': (BuildContext _context) =>
+            Scaffold(body: new Center(child: new Text('Invite'))),
       },
     );
   }
 }
-
-
-
-
-
