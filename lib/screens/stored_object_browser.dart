@@ -19,6 +19,7 @@ import 'package:truelink/globals.dart' as globals;
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'dart:math';
+import 'package:truelink/stored_object/objectsLib.dart';
 
 
 class StoredObjectsScreen extends StatefulWidget {
@@ -122,6 +123,18 @@ class StoredObjectsScreenState extends State<StoredObjectsScreen> {
       itemCount: objectsFromServer.objects.length,
       itemBuilder: (context, index) {
         return ListTile(
+          leading: FutureBuilder(
+            builder: (context, projectSnap) {
+                    if (projectSnap.connectionState == ConnectionState.none &&
+                        projectSnap.hasData == null) {
+                      //print('project snapshot data is: ${projectSnap.data}');
+                      return Container(width: 0.0, height: 0.0);
+                    // ignore: missing_return
+                    } return projectSnap.data;
+                  },
+            future: ObjectsAPI.getPngImage(objectsFromServer.objects.elementAt(index).name),
+          
+          ),
 
           title: Text(objectsFromServer.objects.elementAt(index).name),
           subtitle: FlatButton(child:Text("View"),onPressed:() => buttonStoredObjectDetailAction(context,objectsFromServer.objects.elementAt(index).name),),
