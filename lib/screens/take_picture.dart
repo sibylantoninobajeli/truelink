@@ -198,7 +198,7 @@ class SendPictureScreenState extends State<SendPictureScreen> {
   sendPicture() async {
     try {
       var uri = Uri.parse(
-          'https://objectstorage.eu-frankfurt-1.oraclecloud.com/p/BnloPp9BMEKWt_S7g-2GoOTKB6HB4om-_GPQvXGnLEFGm1FDdZyInFEwpKaH2ami/n/frhvjnni10jd/b/BlockChainSibylBucket/o/bitcoin-3163494__340.png');
+          'https://objectstorage.eu-frankfurt-1.oraclecloud.com/p/BnloPp9BMEKWt_S7g-2GoOTKB6HB4om-_GPQvXGnLEFGm1FDdZyInFEwpKaH2ami/n/frhvjnni10jd/b/BlockChainSibylBucket/o/bitcoin-3163494__341.png');
 /*      var request = http.MultipartRequest('PUT', uri)
       //..fields['user'] = 'nweiz@google.com'
         ..files.add(await http.MultipartFile.fromPath(

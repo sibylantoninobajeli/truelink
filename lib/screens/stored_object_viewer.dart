@@ -1,31 +1,20 @@
 import 'dart:typed_data';
-import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';  //for date format
-import 'package:intl/date_symbol_data_local.dart';  //for date locale
-import 'package:intl/date_symbols.dart';
-import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart' show join;
-import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
-import 'package:pointycastle/asymmetric/api.dart';
 import 'package:truelink/blockchain/rsa_pem.dart';
 import 'package:truelink/models/stored_object.dart';
-import 'package:truelink/screens/stored_object_viewer.dart';
 import '../blockchain/crypto.dart';
 import 'package:truelink/globals.dart' as globals;
 import 'package:crypto/crypto.dart';
-import 'dart:convert';
-import 'dart:math';
 
-
-class StoredObjectsScreen extends StatefulWidget {
+class StoredObjectViewScreen extends StatefulWidget {
   final title;
-  StoredObjectsScreen({Key key, this.title}) : super(key: key);
+  final objectName;
+  StoredObjectViewScreen(this.objectName,{Key key, this.title}) : super(key: key);
   @override
-  StoredObjectsScreenState createState() => StoredObjectsScreenState();
+  StoredObjectViewScreenState createState() => StoredObjectViewScreenState();
 }
 
 
@@ -39,7 +28,7 @@ String convertToFingerprintStringFormat(String str) {
 }
 
 
-class StoredObjectsScreenState extends State<StoredObjectsScreen> {
+class StoredObjectViewScreenState extends State<StoredObjectViewScreen> {
   final tenancyId="ocid1.tenancy.oc1..aaaaaaaaim3faii6ffmkujfczxiz6e4ezw5ogmj4ftqwosi7tyw4fstdkitq";
   final authUserId="ocid1.user.oc1..aaaaaaaaxofkollklmasvqzvycdjw5wpx47dlk3kfqz2n63ygrpdby3dysdq";
 
@@ -51,18 +40,19 @@ class StoredObjectsScreenState extends State<StoredObjectsScreen> {
 
   static final host="objectstorage.eu-frankfurt-1.oraclecloud.com";
   static final method="GET";
-  static final target="/n/frhvjnni10jd/b/BlockChainSibylBucket/o?compartmentId=ocid1.compartment.oc1..aaaaaaaawoc74tyx4r4iksbgffs37vv7h2okwbi55wmsn53sv6rjxwh5b4qq";
+  static final target_prefix="/n/frhvjnni10jd/b/BlockChainSibylBucket/o/";
 
   var uri;
   static final alg="rsa-sha256";
   static final sigVersion="1";
   static var headers="(request-target) date host";
   var sig;
-  final request_target="(request-target): "+method.toLowerCase()+" "+target;
+
   var date_header,host_header,signing_string="";
   String datenow;
   StoredObjects objectsFromServer;
 
+  String target="";
   @override
   void initState() {
     super.initState();
@@ -77,6 +67,8 @@ class StoredObjectsScreenState extends State<StoredObjectsScreen> {
 
     date_header="date: "+datenow;
     host_header="host: $host";
+    target=target_prefix+widget.objectName;
+    final request_target="(request-target): "+method.toLowerCase()+" "+target;
     globals.localLog("classname","request target: "+ request_target);
 
     signing_string="$request_target\n$date_header\n$host_header";
@@ -89,7 +81,8 @@ class StoredObjectsScreenState extends State<StoredObjectsScreen> {
     callAPI();
   }
 
-
+  Image img;
+Map resp_headers;
   callAPI() async {
     String authStr="Signature version=\"$sigVersion\",keyId=\"$keyId\",algorithm=\"$alg\",headers=\"$headers\",signature=\"$sig\"";
     //authStr='Signature version="1",keyId="ocid1.tenancy.oc1..aaaaaaaaim3faii6ffmkujfczxiz6e4ezw5ogmj4ftqwosi7tyw4fstdkitq/ocid1.user.oc1..aaaaaaaaxofkollklmasvqzvycdjw5wpx47dlk3kfqz2n63ygrpdby3dysdq/29:fb:09:6f:81:8a:28:ae:ec:2c:8f:89:46:fc:08:fc",algorithm="rsa-sha256",headers="(request-target) date host",signature="kPlqffONoOyl/JFyP/P5JOio2pCovYfEtKfDlUuh3XngrpdH4LmvxraVWEaL8PY38xqc8+QWQp2lt57IPPeMuL56KOu5EoQy9dL2KOZlS1aYborReB7qRpaS4rGdvQOxWxyw+G/SVQm5C2IkCBHNdOWLFtvp2mwHwYAlu2GsaLEk8wrXF6FkyJKVy9lj8B5Dp9WJvoaoz/AGpedCuiSNJrfCVnLMLVVyIQSVYuo1Dyb5GL2BerKwQ+ez1w3zQEuRa9N5T+DIIvl29Fsyy6h7naNU+TNAFRhlnQCjDrOz5jkLOO1uWl5J3Yd2/oApa1L3PKEKTR7xZlXBVgQjxC61BQ=="';
@@ -98,33 +91,21 @@ class StoredObjectsScreenState extends State<StoredObjectsScreen> {
     globals.localLog("storage call aut", authStr.toString());
     var response = await http.get(uri,headers: reqheaders);
     globals.localLog("storage call", response.reasonPhrase);
-    globals.localLog("storage call", response.body);
-    final JsonDecoder _decoder = new JsonDecoder();
-    var map=_decoder.convert(response.body);
-    setState(() {
-      objectsFromServer= StoredObjects.fromMap(map);
+    //globals.localLog("storage call", response.body);
 
+
+    setState(() {
+      img = Image.network(uri.toString(),width:300.0,headers: reqheaders,scale: 0.5,);
     });
   }
 
-
-
-  static Future<void> buttonStoredObjectDetailAction(BuildContext context,String title) async {
-    Navigator.of(context).push(
-      CupertinoPageRoute<void>(
-          title: title, builder: (BuildContext context) => StoredObjectViewScreen(title,title: title)),
-    );
-  }
-
-  Widget _objectsListView(BuildContext context) {
+  Widget _headersListView(BuildContext context) {
     return ListView.builder(
-      shrinkWrap: true,
-      itemCount: objectsFromServer.objects.length,
+      itemCount:  resp_headers.length,
       itemBuilder: (context, index) {
         return ListTile(
-
-          title: Text(objectsFromServer.objects.elementAt(index).name),
-          subtitle: FlatButton(child:Text("View"),onPressed:() => buttonStoredObjectDetailAction(context,objectsFromServer.objects.elementAt(index).name),),
+          title: Text(resp_headers.entries.elementAt(index).key+": "+
+              resp_headers.entries.elementAt(index).value),
         );
       },
     );
@@ -142,9 +123,10 @@ class StoredObjectsScreenState extends State<StoredObjectsScreen> {
         Text(_date.format(DateTime.now().toUtc()) + " GMT " ),
         Text(globals.rsaPrivateKey.toString()),
         Text(globals.rsaPublicKey.toString()),
-        FlatButton(child:Text("Call API"),onPressed: callAPI,),
+
+        resp_headers!=null?_headersListView(context):Container(),
         Text(objectsFromServer!=null?objectsFromServer.objects.first.name:"--"),
-        objectsFromServer!=null?_objectsListView(context):Container()
+        img!=null?img:Container()
 
 
       ],)
