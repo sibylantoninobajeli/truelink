@@ -12,6 +12,7 @@ import 'package:truelink/globals.dart' as globals;
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'package:truelink/oracle/stored_object/objectsLib.dart';
+//import 'package:truelink/screens/stored_object_viewerLib.dart';
 
 
 class StoredObjectsScreen extends StatefulWidget {
@@ -82,7 +83,7 @@ class StoredObjectsScreenState extends State<StoredObjectsScreen> {
     callAPI();
   }
 
-
+ Image img;
   callAPI() async {
     String authStr="Signature version=\"$sigVersion\",keyId=\"$keyId\",algorithm=\"$alg\",headers=\"$headers\",signature=\"$sig\"";
     //authStr='Signature version="1",keyId="ocid1.tenancy.oc1..aaaaaaaaim3faii6ffmkujfczxiz6e4ezw5ogmj4ftqwosi7tyw4fstdkitq/ocid1.user.oc1..aaaaaaaaxofkollklmasvqzvycdjw5wpx47dlk3kfqz2n63ygrpdby3dysdq/29:fb:09:6f:81:8a:28:ae:ec:2c:8f:89:46:fc:08:fc",algorithm="rsa-sha256",headers="(request-target) date host",signature="kPlqffONoOyl/JFyP/P5JOio2pCovYfEtKfDlUuh3XngrpdH4LmvxraVWEaL8PY38xqc8+QWQp2lt57IPPeMuL56KOu5EoQy9dL2KOZlS1aYborReB7qRpaS4rGdvQOxWxyw+G/SVQm5C2IkCBHNdOWLFtvp2mwHwYAlu2GsaLEk8wrXF6FkyJKVy9lj8B5Dp9WJvoaoz/AGpedCuiSNJrfCVnLMLVVyIQSVYuo1Dyb5GL2BerKwQ+ez1w3zQEuRa9N5T+DIIvl29Fsyy6h7naNU+TNAFRhlnQCjDrOz5jkLOO1uWl5J3Yd2/oApa1L3PKEKTR7xZlXBVgQjxC61BQ=="';
@@ -97,6 +98,11 @@ class StoredObjectsScreenState extends State<StoredObjectsScreen> {
     setState(() {
       objectsFromServer= StoredObjects.fromMap(map);
 
+    });
+
+    //img=await ObjectsAPI.getPngImage("bitcoin-3163494__341.png",20,20);
+    setState(() {
+      globals.localLog("classname", img.toStringShort());
     });
   }
 
@@ -115,7 +121,9 @@ class StoredObjectsScreenState extends State<StoredObjectsScreen> {
       itemCount: objectsFromServer.objects.length,
       itemBuilder: (context, index) {
         return ListTile(
-          leading: FutureBuilder(
+            //leading: Container(width:10,height: 20.0,child:Container(width:10,height: 50.0,)),
+
+          leading: Container(width:60,height: 80.0,child: FutureBuilder(
             builder: (context, projectSnap) {
                     if (projectSnap.connectionState == ConnectionState.none &&
                         projectSnap.hasData == null) {
@@ -124,9 +132,8 @@ class StoredObjectsScreenState extends State<StoredObjectsScreen> {
                     // ignore: missing_return
                     } return projectSnap.data;
                   },
-            future: ObjectsAPI.getPngImage(objectsFromServer.objects.elementAt(index).name),
-          
-          ),
+            future: ObjectsAPI.getPngImage(objectsFromServer.objects.elementAt(index).name,20,20),
+          )),
 
           title: Text(objectsFromServer.objects.elementAt(index).name),
           subtitle: FlatButton(child:Text("View"),onPressed:() => buttonStoredObjectDetailAction(context,objectsFromServer.objects.elementAt(index).name),),
@@ -147,6 +154,7 @@ class StoredObjectsScreenState extends State<StoredObjectsScreen> {
         Text(_date.format(DateTime.now().toUtc()) + " GMT " ),
         Text(globals.rsaPrivateKey.toString()),
         Text(globals.rsaPublicKey.toString()),
+        img!=null?img:Container(child:Text("<<<<<")),
         FlatButton(child:Text("Call API"),onPressed: callAPI,),
         Text(objectsFromServer!=null?objectsFromServer.objects.first.name:"--"),
         objectsFromServer!=null?_objectsListView(context):Container()

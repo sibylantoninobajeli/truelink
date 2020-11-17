@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:truelink/globals.dart' as globals;
 import 'package:truelink/localization/custom_localizations.dart';
+import 'package:truelink/oracle/stored_object/objectsLib.dart';
 import '../screens/key_generator.dart';
 
 class BtnCheckKey extends StatefulWidget {
@@ -18,13 +19,7 @@ class _BtnCheckKey extends State<BtnCheckKey> {
   initState()  {
     super.initState();
 
-    globals.getFingerprint().then((value) => {
-      fingerPrint=value
-    });
 
-    publicKeyPresent =globals.rsaPublicKey!=null?true:false;
-    privateKeyPresent =globals.rsaPrivateKey!=null?true:false;
-            
   }
 
   static Future<void> buttonStoredObject(BuildContext context) async {
@@ -34,9 +29,17 @@ class _BtnCheckKey extends State<BtnCheckKey> {
     );
   }
 
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+    globals.getFingerprint().then((value) => {
+      fingerPrint=value
+    });
+
+    publicKeyPresent =globals.rsaPublicKey!=null?true:false;
+    privateKeyPresent =globals.rsaPrivateKey!=null?true:false;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
@@ -52,9 +55,9 @@ class _BtnCheckKey extends State<BtnCheckKey> {
           ),
           child: Center(
             child: Text(
-                publicKeyPresent
-                    ? CustomLocalizations.of(context).chooserRegenMex
-                    : CustomLocalizations.of(context).chooserKeyGenMex,
+                (publicKeyPresent
+                    ? CustomLocalizations.of(context).chooserRegenMex+"\n"+ObjectsAPI.getCurrentPrivateKeyFingerprint()
+                    : CustomLocalizations.of(context).chooserKeyGenMex),
                 style: globals.isaTextStyleBoldBlueVeryBig),
           ),
         ),

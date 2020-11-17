@@ -89,13 +89,19 @@ Map resp_headers;
     Map<String,String> reqheaders={ "date":datenow,"host":host,"Authorization":authStr };
     globals.localLog("storage call uri", uri.toString());
     globals.localLog("storage call aut", authStr.toString());
-    var response = await http.get(uri,headers: reqheaders);
-    globals.localLog("storage call", response.reasonPhrase);
+    //var response = await http.get(uri,headers: reqheaders);
+    //globals.localLog("storage call", response.reasonPhrase);
     //globals.localLog("storage call", response.body);
 
 
     setState(() {
-      img = Image.network(uri.toString(),width:300.0,headers: reqheaders,scale: 0.5,);
+      try {
+        img = Image.network(
+          uri.toString(), width: 300.0, headers: reqheaders, scale: 0.5,);
+      }catch (e){
+
+      }
+
     });
   }
 

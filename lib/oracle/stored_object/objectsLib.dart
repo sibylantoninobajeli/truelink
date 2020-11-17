@@ -44,15 +44,24 @@ class ObjectsAPI {
     return chunks.join(':');
   }
 
-  static Future<Image> getPngImage(String objectName) async {
+
+  static String getCurrentPrivateKeyFingerprint(){
     List<int> derFromPublicKey =
-        decodePEM(encodePublicKeyToPem(globals.rsaPublicKey));
+    decodePEM(encodePublicKeyToPem(globals.rsaPublicKey));
     String compressedKeyFingerprint = md5.convert(derFromPublicKey).toString();
-    keyFingerprint = convertToFingerprintStringFormat(compressedKeyFingerprint);
+    return compressedKeyFingerprint;
+  }
+
+  static Future<Image> getPngImage(String objectName,double w, double h) async {
+
+    keyFingerprint = getCurrentPrivateKeyFingerprint();
+    keyFingerprint = convertToFingerprintStringFormat(keyFingerprint);
+
     globals.localLog("classname", "fingerprint:" + keyFingerprint);
 
     keyId = "$tenancyId/$authUserId/$keyFingerprint";
     datenow = _date.format(DateTime.now().toUtc()) + " GMT";
+
     globals.localLog("classname", "Datenow: " + datenow);
 
     date_header = "date: " + datenow;
@@ -63,12 +72,10 @@ class ObjectsAPI {
     globals.localLog("classname", "request target: " + request_target);
 
     signing_string = "$request_target\n$date_header\n$host_header";
-    //signing_string="(request-target): get /n/frhvjnni10jd/b/BlockChainSibylBucket/o?compartmentId=ocid1.compartment.oc1..aaaaaaaawoc74tyx4r4iksbgffs37vv7h2okwbi55wmsn53sv6rjxwh5b4qq\ndate: Sun, 15 Nov 2020 21:47:14 GMT\nhost: objectstorage.eu-frankfurt-1.oraclecloud.com";
 
     sig = sign(
         Uint8List.fromList(signing_string.codeUnits), globals.rsaPrivateKey);
 
-    //sig = "iro/BGeKEwX4miFoHRXqIVNPLUnvulwnTMZozhikz8X9IRJ4FoodZTCy/1SvEvJdhfR97Q23KEsEoxhQGfn2MYFS8UnIVkiZ9tl5dq+GlxbjFRGfT8q75Vc/Aciqvj1/nyazAKME8d8fcWz8OlYPXrTgiemKCgwK2WTihlf/6ungburfuB1E3jL5jFXqEwO2BUamfm6+EzDudj6a1QRxtYg5zvllNr+9gQUathlXlmbIhDsU753DoxC4BnLtAIiHcoyGbhcpj+k8cu1cn1KyGc8AXN9hQvxDqDRzWcpMsAA/uUOlM2+6aQP8kuC2bJm9PDiqbog+vhZLNV9aaks1EQ==";
     uri = Uri.parse("https://" + host + target);
 
     String authStr =
@@ -80,14 +87,22 @@ class ObjectsAPI {
     };
     globals.localLog("storage call uri", uri.toString());
     globals.localLog("storage call aut", authStr.toString());
-    await http.get(uri, headers: reqheaders).then((response){
-      return Image.network(
+
+    globals.localLog("storage","^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+    globals.localLog("storage call aut", ""+reqheaders.toString());
+
+    /*globals.localLog("storage","^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+    globals.localLog("storage call aut", ""+_headers.toString());*/
+
+    //await http.get(uri, headers: reqheaders).then((response){
+    //var response = await http.get(uri,headers: reqheaders);
+    return Image.network(
         uri.toString(),
-        width: 300.0,
+        width: 300,
         headers: reqheaders,
         scale: 0.5,
       );
-    });
+
 
   }
 }
