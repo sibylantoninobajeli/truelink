@@ -165,6 +165,7 @@ saveRsaKeys(api.AsymmetricKeyPair pair) async {
 
     getPublicRsaKeys();
     getPrivateRsaKeys();
+    internalPushNotificationProvider.notifyNewInternalPush(InternalNotificationType.NEW_KEYPAIR, null);
 
     return true;
   }catch(e){
