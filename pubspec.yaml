@@ -52,6 +52,22 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+
+  #used to generate icons for both platform
+  # usage ../../Documents/FlutterSDK/flutter/bin/flutter pub get
+  #       ../../Documents/FlutterSDK/flutter/bin/flutter pub pub run flutter_launcher_icons:main
+  #       c:\flutter\bin\flutter  pub pub run flutter_launcher_icons:main
+  flutter_launcher_icons: ^0.8.1
+flutter_icons:
+  android: true
+  ios: "Example-Icon"
+  image_path: "assets/icons/truelink_logo.png"
+  #image_path_android: "assets/icon/icon_android.png"
+  #image_path_ios: "assets/icon/icon_ios.png"
+  adaptive_icon_background: "#FFFAFAFA"
+  #adaptive_icon_foreground: "assets/icon/icon-foreground.png"
+
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

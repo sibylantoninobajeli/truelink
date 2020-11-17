@@ -1,15 +1,15 @@
 library insofoscuolapp.globals;
 import 'package:flutter/material.dart';
 import 'package:pointycastle/asymmetric/api.dart';
-import 'package:truelink/internalpushnotification_subscription.dart';
+import 'package:truelink/internalnotification_subscription.dart';
 import 'cfg_network_endpoint.dart';
 import 'package:device_info/device_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:pointycastle/api.dart' as api;
 import 'dart:async';
-import 'blockchain/rsa_pem.dart';
-import 'blockchain/crypto.dart';
+import 'package:truelink/oracle/blockchain/rsa_pem.dart';
+import 'package:truelink/oracle/blockchain/crypto.dart';
 
 
 

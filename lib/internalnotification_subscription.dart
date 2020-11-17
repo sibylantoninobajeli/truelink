@@ -1,12 +1,11 @@
 import 'globals.dart' as globals;
 import 'package:vibration/vibration.dart';
-import 'main.dart' as main;
 
 
-enum InternalPushNotificationType{ STOP_READING,VERIFIED_ORIGINAL_PRODUCT,VERIFIED_NOT_ORIGINAL_PRODUCT}
+enum InternalNotificationType{ NEW_KEYPAIR, STOP_READING,VERIFIED_ORIGINAL_PRODUCT,VERIFIED_NOT_ORIGINAL_PRODUCT}
 
-abstract class InternalPushNotificationListener {
-  void onInternalNotification(InternalPushNotificationType type, Map<int,String> mex);
+abstract class InternalNotificationListener {
+  void onInternalNotification(InternalNotificationType type, Map<int,String> mex);
 }
 
 // A naive implementation of Observer/Subscriber Pattern. Will do for now.
@@ -18,12 +17,12 @@ class InternalPushNotificationListenerProviderSingleton {
   InternalPushNotificationListenerProviderSingleton.internal() {
     globals.localLog(runtimeType.toString(),":: InternalPushNotificationListenerProviderSingleton.internal Start");
     initState();
-    _subscribers = new List<InternalPushNotificationListener>();
+    _subscribers = new List<InternalNotificationListener>();
     globals.localLog(runtimeType.toString(),":: InternalPushNotificationListenerProviderSingleton.internal Completed");
   }
 
 
-  List<InternalPushNotificationListener> _subscribers;
+  List<InternalNotificationListener> _subscribers;
 
   bool _canVibrate = true;
   void initState() async {
@@ -36,18 +35,18 @@ class InternalPushNotificationListenerProviderSingleton {
 
 
 
-  void unsubscribe(InternalPushNotificationListener listener) {
+  void unsubscribe(InternalNotificationListener listener) {
     final String _methodName="unsubscribe";
     _subscribers.remove(listener);
     globals.localLog(runtimeType.toString()+"::"+_methodName, "Completed");
   }
 
-  void subscribe(InternalPushNotificationListener listener) {
+  void subscribe(InternalNotificationListener listener) {
     globals.localLog(runtimeType.toString(),":: subscribe ");
     _subscribers.add(listener);
   }
 
-  void dispose(InternalPushNotificationListener listener) {
+  void dispose(InternalNotificationListener listener) {
     globals.localLog(runtimeType.toString(),":: dispose ");
     for(var l in _subscribers) {
       if(l == listener)
@@ -55,7 +54,7 @@ class InternalPushNotificationListenerProviderSingleton {
     }
   }
 
-  void notifyNewInternalPush(InternalPushNotificationType type,Map<int, String> mex) {
+  void notifyNewInternalPush(InternalNotificationType type,Map<int, String> mex) {
     if (_canVibrate) {
       Vibration.vibrate(pattern: [500, 1000, 500, 2000], intensities: [1, 255]);
     }
@@ -63,7 +62,7 @@ class InternalPushNotificationListenerProviderSingleton {
 
 
     globals.localLog(runtimeType.toString(),":: notifyNewInternalPush ");
-    _subscribers.forEach((InternalPushNotificationListener s) => s.onInternalNotification(type,mex));
+    _subscribers.forEach((InternalNotificationListener s) => s.onInternalNotification(type,mex));
 
   }
 

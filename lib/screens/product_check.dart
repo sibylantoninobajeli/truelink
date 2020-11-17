@@ -5,7 +5,7 @@ import 'package:truelink/globals.dart' as globals;
 import 'package:flutter/material.dart';
 import 'package:nfc_in_flutter/nfc_in_flutter.dart';
 import 'package:truelink/animation/pulsar.dart';
-import 'package:truelink/internalpushnotification_subscription.dart';
+import 'package:truelink/internalnotification_subscription.dart';
 
 class ProductCheckPage extends StatefulWidget {
   ProductCheckPage({Key key, this.title}) : super(key: key);
@@ -51,13 +51,13 @@ class _ProductCheckPageState extends State<ProductCheckPage> {
             });
 
               globals.internalPushNotificationProvider.notifyNewInternalPush(
-                  InternalPushNotificationType.STOP_READING,
+                  InternalNotificationType.STOP_READING,
                   null
               );
               globals.internalPushNotificationProvider.notifyNewInternalPush(
                   (tag.id.compareTo("043F0D5A5A5784")==0)?
-                  InternalPushNotificationType.VERIFIED_NOT_ORIGINAL_PRODUCT:
-                  InternalPushNotificationType.VERIFIED_ORIGINAL_PRODUCT,
+                  InternalNotificationType.VERIFIED_NOT_ORIGINAL_PRODUCT:
+                  InternalNotificationType.VERIFIED_ORIGINAL_PRODUCT,
                   null
               );
 

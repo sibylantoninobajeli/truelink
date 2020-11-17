@@ -8,21 +8,28 @@ import 'package:camera/camera.dart';
 import 'package:truelink/screens/take_picture.dart';
 import 'package:truelink/screens/product_check.dart';
 
-class HomeScreen extends StatefulWidget{
+import '../internalnotification_subscription.dart';
 
+class HomeScreen extends StatefulWidget{
   @override
   HomeScreenState createState() =>HomeScreenState();
 }
 
-class HomeScreenState extends State<HomeScreen>{
-
+class HomeScreenState extends State<HomeScreen>
+implements InternalNotificationListener{
   static final formKey = GlobalKey<FormState>();
-
 
   @override
   void initState() {
     super.initState();
+    globals.internalPushNotificationProvider.subscribe(this);
     globals.setCheckIsFirstAccessFalse();
+  }
+
+  @override
+  void dispose() {
+    globals.internalPushNotificationProvider.unsubscribe(this);
+    super.dispose();
   }
 
   static Future<void>  buttonTakePictureCheck (BuildContext context) async {
@@ -133,6 +140,20 @@ class HomeScreenState extends State<HomeScreen>{
             ),
           )
         ]));
+  }
+
+  @override
+  void onInternalNotification(InternalNotificationType type, Map<int, String> mex) {
+    // TODO: implement onInternalNotification
+    switch (type) {
+      case InternalNotificationType.NEW_KEYPAIR:
+        setState(() {
+
+        });
+        break;
+      default:
+    }
+
   }
 
 

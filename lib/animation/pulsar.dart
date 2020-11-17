@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:truelink/globals.dart' as globals;
-import 'package:truelink/internalpushnotification_subscription.dart';
+import 'package:truelink/internalnotification_subscription.dart';
 
 
 
@@ -46,29 +46,29 @@ class Pulsar extends StatefulWidget {
 
 class PulsarState extends State<Pulsar>
     with SingleTickerProviderStateMixin
-    implements InternalPushNotificationListener{
+    implements InternalNotificationListener{
   AnimationController _controller;
 
-  void onInternalNotification(InternalPushNotificationType type, Map<int,String> mex){
+  void onInternalNotification(InternalNotificationType type, Map<int,String> mex){
     switch(type){
-      case  InternalPushNotificationType.STOP_READING:
+      case  InternalNotificationType.STOP_READING:
         _stopAnimation();
         break;
-      case InternalPushNotificationType.VERIFIED_NOT_ORIGINAL_PRODUCT:
+      case InternalNotificationType.VERIFIED_NOT_ORIGINAL_PRODUCT:
         _showAlert();
         break;
-      case InternalPushNotificationType.VERIFIED_ORIGINAL_PRODUCT:
+      case InternalNotificationType.VERIFIED_ORIGINAL_PRODUCT:
         _showGood();
         break;
     }
 
-    if (type == InternalPushNotificationType.STOP_READING){
+    if (type == InternalNotificationType.STOP_READING){
       _stopAnimation();
     }
-    if (type == InternalPushNotificationType.STOP_READING){
+    if (type == InternalNotificationType.STOP_READING){
       _stopAnimation();
     }
-    if (type == InternalPushNotificationType.STOP_READING){
+    if (type == InternalNotificationType.STOP_READING){
       _stopAnimation();
     }
   }
