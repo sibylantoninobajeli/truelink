@@ -8,8 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:pointycastle/api.dart' as api;
 import 'dart:async';
-import 'package:truelink/oracle/blockchain/rsa_pem.dart';
-import 'package:truelink/oracle/blockchain/crypto.dart';
+import 'package:truelink/oracle/rsa_pem.dart';
+import 'package:truelink/oracle/crypto.dart';
 
 
 
@@ -35,6 +35,12 @@ String languageCode;
 
 //const String testEndPoint = "http://192.168.10.25:8000"; //for DEBUG mode
 const String prodEndPoint = "https://infoscuolapp.appspot.com"; //for RELEASE
+
+const blockchainEndPointHost = "blockchain.eu-frankfurt-1.oci.oraclecloud.com";
+
+const objectEndPointHost = "objectstorage.eu-frankfurt-1.oraclecloud.com";
+
+
 
 const String testDevice = 'YOUR_DEVICE_ID';
 final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();

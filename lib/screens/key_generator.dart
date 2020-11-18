@@ -3,7 +3,7 @@ import 'package:truelink/globals.dart' as globals;
 import 'package:convert/convert.dart';
 import 'package:flutter/material.dart';
 import 'package:pointycastle/api.dart' as api;
-import '../oracle/blockchain/crypto.dart';
+import '../oracle/crypto.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:async';
 import 'package:crypto/crypto.dart';

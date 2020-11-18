@@ -2,9 +2,9 @@ import 'dart:typed_data';
 import 'package:intl/intl.dart';  //for date format
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:truelink/oracle/blockchain/rsa_pem.dart';
+import 'package:truelink/oracle/rsa_pem.dart';
 import 'package:truelink/models/stored_object.dart';
-import 'package:truelink/oracle/blockchain/crypto.dart';
+import 'package:truelink/oracle/crypto.dart';
 import 'package:truelink/globals.dart' as globals;
 import 'package:crypto/crypto.dart';
 
