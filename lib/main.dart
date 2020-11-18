@@ -48,7 +48,6 @@ class _TrueLinkApp extends State<TrueLinkApp> {
 
   @override
   void initState() {
-    final String _methodName = "initState";
     // TODO: implement initState
     super.initState();
     //globals.authStateProvider.subscribe(this);
@@ -72,12 +71,6 @@ class _TrueLinkApp extends State<TrueLinkApp> {
     //globals.authStateProvider.checkLogin();
   }
 
-  Image _bkgImg = new Image(
-    image: new AssetImage("assets/truelink_logo.png"),
-    fit: BoxFit.none,
-    color: Colors.white70,
-    colorBlendMode: BlendMode.dstOut,
-  );
 
   // This widget is the root of your application.
   @override

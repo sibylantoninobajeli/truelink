@@ -1,16 +1,11 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:truelink/globals.dart' as globals;
 import 'package:convert/convert.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:http/io_client.dart';
 import 'package:pointycastle/api.dart' as api;
-import 'package:pointycastle/asymmetric/api.dart';
 import '../oracle/blockchain/crypto.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:async';
-import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 
@@ -41,15 +36,15 @@ class KeyGeneratorScreenState extends State<KeyGeneratorScreen> {
   _makeKeypairRequest() async {
     try {
       var pair = await makeGenerationRequest();
-      String public_pem = encodePublicKeyToPem(pair.publicKey);
-      String private_pem = encodePrivateKeyToPem(pair.privateKey);
+      String publicPem = encodePublicKeyToPem(pair.publicKey);
+      String privatePem = encodePrivateKeyToPem(pair.privateKey);
 
-      var filepupem = await _writeToFile(public_pem, "public_key.pem");
-      var fileprpem = await _writeToFile(private_pem, "private_key.pem");
+      var filePubPem = await _writeToFile(publicPem, "public_key.pem");
+      var filePriPem = await _writeToFile(privatePem, "private_key.pem");
 
       //var input = File(filepem);
       md5str = await md5
-          .bind(filepupem.openRead())
+          .bind(filePubPem.openRead())
           .first;
 
       globals.saveRsaKeys(pair);
@@ -61,8 +56,8 @@ class KeyGeneratorScreenState extends State<KeyGeneratorScreen> {
         subject: 'Chiave pubblica e priv',
         recipients: ['abajeli.sibyl@gmail.com'],
         attachmentPaths: [
-          filepupem.uri.path,
-          fileprpem.uri.path
+          filePubPem.uri.path,
+          filePriPem.uri.path
         ],
         isHTML: false,
       ):Email(
@@ -71,7 +66,7 @@ class KeyGeneratorScreenState extends State<KeyGeneratorScreen> {
         recipients: ['abajeli.sibyl@gmail.com'],
         bcc: ['abajeli.sibyl@gmail.com'],
         attachmentPaths: [
-          filepupem.uri.path
+          filePubPem.uri.path
         ],
         isHTML: false,
       );
@@ -83,6 +78,7 @@ class KeyGeneratorScreenState extends State<KeyGeneratorScreen> {
       } catch (error) {
         platformResponse = error.toString();
       }
+      globals.localLog("KeuGeneratorScreen._makeRequest", platformResponse);
 
       setState(() {
         keypair = pair;

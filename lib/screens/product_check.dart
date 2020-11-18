@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
 import 'package:truelink/globals.dart' as globals;
 import 'package:flutter/material.dart';
 import 'package:nfc_in_flutter/nfc_in_flutter.dart';
@@ -26,13 +25,13 @@ class ProductCheckPage extends StatefulWidget {
 }
 
 class _ProductCheckPageState extends State<ProductCheckPage> {
-  int _counter = 0;
+  //int _counter = 0;
   // _stream is a subscription to the stream returned by `NFC.read()`.
   // The subscription is stored in state so the stream can be canceled later
   StreamSubscription<NDEFMessage> _streamReading;
   // _tags is a list of scanned tags
-  NDEFMessage _tag = null;
-  bool _supportsNFC = false;
+  NDEFMessage _tag;
+  //bool _supportsNFC = false;
 
   // _readNFC() calls `NFC.readNDEF()` and stores the subscription and scanned
   // tags in state
@@ -120,7 +119,7 @@ class _ProductCheckPageState extends State<ProductCheckPage> {
     super.initState();
     NFC.isNDEFSupported.then((supported) {
       setState(() {
-        _supportsNFC = true;
+        //_supportsNFC = true;
       });
     });
     _readTrueLink();

@@ -60,6 +60,9 @@ class PulsarState extends State<Pulsar>
       case InternalNotificationType.VERIFIED_ORIGINAL_PRODUCT:
         _showGood();
         break;
+      case InternalNotificationType.NEW_KEYPAIR:
+        // TODO: Handle this case.
+        break;
     }
 
     if (type == InternalNotificationType.STOP_READING){

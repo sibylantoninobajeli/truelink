@@ -11,9 +11,9 @@ abstract class RegistrationScreenContract {
 }
 
 class RegistrationScreenPresenter {
-  RegistrationScreenContract _view;
+  //RegistrationScreenContract _view;
   //RestApiDatasource api = new RestApiDatasource();
-  RegistrationScreenPresenter(this._view);
+  //RegistrationScreenPresenter(this._view);
 
   /*
   QueryMutationUser queryMutation = QueryMutationUser();

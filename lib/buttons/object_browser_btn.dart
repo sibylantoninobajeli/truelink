@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:truelink/globals.dart' as globals;
 import 'package:truelink/localization/custom_localizations.dart';
 
-import 'package:truelink/screens/key_generator.dart';
 import 'package:truelink/screens/stored_object_browser.dart';
 
 class ObjectBrowserButton extends StatefulWidget {

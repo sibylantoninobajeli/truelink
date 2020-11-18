@@ -52,8 +52,8 @@ class StoredObjectsScreenState extends State<StoredObjectsScreen> {
   static final sigVersion="1";
   static var headers="(request-target) date host";
   var sig;
-  final request_target="(request-target): "+method.toLowerCase()+" "+target;
-  var date_header,host_header,signing_string="";
+  final requestTarget="(request-target): "+method.toLowerCase()+" "+target;
+  var dateHeader,hostHeader,signingString="";
   String datenow;
   StoredObjects objectsFromServer;
 
@@ -69,14 +69,14 @@ class StoredObjectsScreenState extends State<StoredObjectsScreen> {
     datenow=_date.format(DateTime.now().toUtc()) + " GMT";
     globals.localLog("classname", "Datenow: "+datenow);
 
-    date_header="date: "+datenow;
-    host_header="host: $host";
-    globals.localLog("classname","request target: "+ request_target);
+    dateHeader="date: "+datenow;
+    hostHeader="host: $host";
+    globals.localLog("classname","request target: "+ requestTarget);
 
-    signing_string="$request_target\n$date_header\n$host_header";
+    signingString="$requestTarget\n$dateHeader\n$hostHeader";
     //signing_string="(request-target): get /n/frhvjnni10jd/b/BlockChainSibylBucket/o?compartmentId=ocid1.compartment.oc1..aaaaaaaawoc74tyx4r4iksbgffs37vv7h2okwbi55wmsn53sv6rjxwh5b4qq\ndate: Sun, 15 Nov 2020 21:47:14 GMT\nhost: objectstorage.eu-frankfurt-1.oraclecloud.com";
 
-    sig = sign(Uint8List.fromList(signing_string.codeUnits), globals.rsaPrivateKey);
+    sig = sign(Uint8List.fromList(signingString.codeUnits), globals.rsaPrivateKey);
 
     //sig = "iro/BGeKEwX4miFoHRXqIVNPLUnvulwnTMZozhikz8X9IRJ4FoodZTCy/1SvEvJdhfR97Q23KEsEoxhQGfn2MYFS8UnIVkiZ9tl5dq+GlxbjFRGfT8q75Vc/Aciqvj1/nyazAKME8d8fcWz8OlYPXrTgiemKCgwK2WTihlf/6ungburfuB1E3jL5jFXqEwO2BUamfm6+EzDudj6a1QRxtYg5zvllNr+9gQUathlXlmbIhDsU753DoxC4BnLtAIiHcoyGbhcpj+k8cu1cn1KyGc8AXN9hQvxDqDRzWcpMsAA/uUOlM2+6aQP8kuC2bJm9PDiqbog+vhZLNV9aaks1EQ==";
     uri = Uri.parse("https://"+host+target);
@@ -102,18 +102,12 @@ class StoredObjectsScreenState extends State<StoredObjectsScreen> {
 
     //img=await ObjectsAPI.getPngImage("bitcoin-3163494__341.png",20,20);
     setState(() {
-      globals.localLog("classname", img.toStringShort());
+      //globals.localLog("classname", img.toStringShort());
     });
   }
 
 
 
-  static Future<void> buttonStoredObjectDetailAction(BuildContext context,String title) async {
-    Navigator.of(context).push(
-      CupertinoPageRoute<void>(
-          title: title, builder: (BuildContext context) => StoredObjectViewScreen(title,title: title)),
-    );
-  }
 
   Widget _objectsListView(BuildContext context) {
     return ListView.builder(
@@ -124,19 +118,20 @@ class StoredObjectsScreenState extends State<StoredObjectsScreen> {
             //leading: Container(width:10,height: 20.0,child:Container(width:10,height: 50.0,)),
 
           leading: Container(width:60,height: 80.0,child: FutureBuilder(
+            initialData: Container(),
             builder: (context, projectSnap) {
                     if (projectSnap.connectionState == ConnectionState.none &&
                         projectSnap.hasData == null) {
                       //print('project snapshot data is: ${projectSnap.data}');
-                      return Container(width: 0.0, height: 0.0);
+                      return Container();
                     // ignore: missing_return
                     } return projectSnap.data;
                   },
-            future: ObjectsAPI.getPngImage(objectsFromServer.objects.elementAt(index).name,20,20),
+            future: ObjectsAPI.wrapActionButtonImage(context,objectsFromServer.objects.elementAt(index).name,20,20),
           )),
 
           title: Text(objectsFromServer.objects.elementAt(index).name),
-          subtitle: FlatButton(child:Text("View"),onPressed:() => buttonStoredObjectDetailAction(context,objectsFromServer.objects.elementAt(index).name),),
+          //subtitle: FlatButton(child:Text("View"),onPressed:() => buttonStoredObjectDetailAction(context,objectsFromServer.objects.elementAt(index).name),),
         );
       },
     );
@@ -157,7 +152,7 @@ class StoredObjectsScreenState extends State<StoredObjectsScreen> {
         img!=null?img:Container(child:Text("<<<<<")),
         FlatButton(child:Text("Call API"),onPressed: callAPI,),
         Text(objectsFromServer!=null?objectsFromServer.objects.first.name:"--"),
-        objectsFromServer!=null?_objectsListView(context):Container()
+        objectsFromServer!=null?_objectsListView(context):Container(child:Text("receiving"))
 
 
       ],)

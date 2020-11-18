@@ -1,16 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:truelink/cfg_demo_users.dart';
 import 'package:truelink/globals.dart' as globals;
-import 'package:truelink/localization/custom_localizations.dart';
-//import 'package:truelink/models/isatutenze.dart';
-//import 'auth.dart';
-//import 'package:truelink/data/database_helper.dart';
 import 'login_screen_presenter.dart';
-//import 'change_pwd_screen.dart';
-
-//import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginScreenNew extends StatefulWidget {
   @override

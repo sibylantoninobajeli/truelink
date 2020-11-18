@@ -1,12 +1,13 @@
 import 'dart:typed_data';
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart'; //for date format
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:truelink/oracle/blockchain/rsa_pem.dart';
 import 'package:truelink/models/stored_object.dart';
 import 'package:truelink/oracle/blockchain/crypto.dart';
 import 'package:truelink/globals.dart' as globals;
 import 'package:crypto/crypto.dart';
+import 'package:truelink/screens/stored_object_viewer.dart';
 
 class ObjectsAPI {
   static final tenancyId =
@@ -21,7 +22,7 @@ class ObjectsAPI {
 
   static final host = "objectstorage.eu-frankfurt-1.oraclecloud.com";
   static final method = "GET";
-  static final target_prefix = "/n/frhvjnni10jd/b/BlockChainSibylBucket/o/";
+  static final targetPrefix = "/n/frhvjnni10jd/b/BlockChainSibylBucket/o/";
 
   static var uri;
   static final alg = "rsa-sha256";
@@ -29,8 +30,8 @@ class ObjectsAPI {
   static var headers = "(request-target) date host";
   static var sig;
 
-  static var date_header, host_header, signing_string = "";
-  static String datenow;
+  static var dateHeader, hostHeader, signingString = "";
+  static String dateNow;
   static StoredObjects objectsFromServer;
 
   static String target = "";
@@ -52,6 +53,23 @@ class ObjectsAPI {
     return compressedKeyFingerprint;
   }
 
+
+
+
+
+
+  static Future<void> buttonStoredObjectDetailAction(BuildContext context,String title) async {
+    Navigator.of(context).push(
+      CupertinoPageRoute<void>(
+          title: title, builder: (BuildContext context) => StoredObjectViewScreen(title,title: title)),
+    );
+  }
+  static Future<Widget> wrapActionButtonImage(BuildContext context,String objectName,double w, double h) async{
+      Image img=await getPngImage( objectName,w,h);
+    return   FlatButton(child:img,onPressed:() => buttonStoredObjectDetailAction(context,objectName));
+  }
+
+
   static Future<Image> getPngImage(String objectName,double w, double h) async {
 
     keyFingerprint = getCurrentPrivateKeyFingerprint();
@@ -60,28 +78,28 @@ class ObjectsAPI {
     globals.localLog("classname", "fingerprint:" + keyFingerprint);
 
     keyId = "$tenancyId/$authUserId/$keyFingerprint";
-    datenow = _date.format(DateTime.now().toUtc()) + " GMT";
+    dateNow = _date.format(DateTime.now().toUtc()) + " GMT";
 
-    globals.localLog("classname", "Datenow: " + datenow);
+    globals.localLog("classname", "Datenow: " + dateNow);
 
-    date_header = "date: " + datenow;
-    host_header = "host: $host";
-    target = target_prefix + objectName;
-    final request_target =
+    dateHeader = "date: " + dateNow;
+    hostHeader = "host: $host";
+    target = targetPrefix + objectName;
+    final requestTarget =
         "(request-target): " + method.toLowerCase() + " " + target;
-    globals.localLog("classname", "request target: " + request_target);
+    globals.localLog("classname", "request target: " + requestTarget);
 
-    signing_string = "$request_target\n$date_header\n$host_header";
+    signingString = "$requestTarget\n$dateHeader\n$hostHeader";
 
     sig = sign(
-        Uint8List.fromList(signing_string.codeUnits), globals.rsaPrivateKey);
+        Uint8List.fromList(signingString.codeUnits), globals.rsaPrivateKey);
 
     uri = Uri.parse("https://" + host + target);
 
     String authStr =
         "Signature version=\"$sigVersion\",keyId=\"$keyId\",algorithm=\"$alg\",headers=\"$headers\",signature=\"$sig\"";
     Map<String, String> reqheaders = {
-      "date": datenow,
+      "date": dateNow,
       "host": host,
       "Authorization": authStr
     };

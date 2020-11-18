@@ -100,22 +100,22 @@ class RsaKeyHelper {
     List<int> privateKeyDER = decodePEM(pemString);
     var asn1Parser = new ASN1Parser(privateKeyDER);
     var topLevelSeq = asn1Parser.nextObject() as ASN1Sequence;
-    var version = topLevelSeq.elements[0];
-    var algorithm = topLevelSeq.elements[1];
+    //var version = topLevelSeq.elements[0];
+    //var algorithm = topLevelSeq.elements[1];
     var privateKey = topLevelSeq.elements[2];
 
     asn1Parser = new ASN1Parser(privateKey.contentBytes());
     var pkSeq = asn1Parser.nextObject() as ASN1Sequence;
 
-    version = pkSeq.elements[0];
+    //version = pkSeq.elements[0];
     var modulus = pkSeq.elements[1] as ASN1Integer;
-    var publicExponent = pkSeq.elements[2] as ASN1Integer;
+    //var publicExponent = pkSeq.elements[2] as ASN1Integer;
     var privateExponent = pkSeq.elements[3] as ASN1Integer;
     var p = pkSeq.elements[4] as ASN1Integer;
     var q = pkSeq.elements[5] as ASN1Integer;
-    var exp1 = pkSeq.elements[6] as ASN1Integer;
-    var exp2 = pkSeq.elements[7] as ASN1Integer;
-    var co = pkSeq.elements[8] as ASN1Integer;
+    //var exp1 = pkSeq.elements[6] as ASN1Integer;
+    //var exp2 = pkSeq.elements[7] as ASN1Integer;
+    //var co = pkSeq.elements[8] as ASN1Integer;
 
     RSAPrivateKey rsaPrivateKey = RSAPrivateKey(
         modulus.valueAsBigInteger,
@@ -159,12 +159,12 @@ class RsaKeyHelper {
     var privateKeySeq = new ASN1Sequence();
     var modulus = ASN1Integer(privateKey.n);
     var publicExponent = ASN1Integer(BigInt.parse('65537'));
-    var privateExponent = ASN1Integer(privateKey.d);
+    var privateExponent = ASN1Integer(privateKey.privateExponent);
     var p = ASN1Integer(privateKey.p);
     var q = ASN1Integer(privateKey.q);
-    var dP = privateKey.d % (privateKey.p - BigInt.from(1));
+    var dP = privateKey.privateExponent % (privateKey.p - BigInt.from(1));
     var exp1 = ASN1Integer(dP);
-    var dQ = privateKey.d % (privateKey.q - BigInt.from(1));
+    var dQ = privateKey.privateExponent % (privateKey.q - BigInt.from(1));
     var exp2 = ASN1Integer(dQ);
     var iQ = privateKey.q.modInverse(privateKey.p);
     var co = ASN1Integer(iQ);

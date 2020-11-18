@@ -153,14 +153,14 @@ getPrivateRsaKeys() async {
 saveRsaKeys(api.AsymmetricKeyPair pair) async {
   //rsaPrivateKey=pair.privateKey;
   //rsaPublicKey=pair.publicKey;
-  String public_pem = encodePublicKeyToPem(pair.publicKey);
-  String private_pem = encodePrivateKeyToPem(pair.privateKey);
+  String publicPem = encodePublicKeyToPem(pair.publicKey);
+  String privatePem = encodePrivateKeyToPem(pair.privateKey);
   // obtain shared preferences
   try {
-    (await prefs).setString('public_key',public_pem);
-    localLog("saved","public_key len"+public_pem.length.toString()+" :"+public_pem);
-    (await prefs).setString('private_key',private_pem);
-    localLog("saved","private_key len"+private_pem.length.toString()+" :"+private_pem);
+    (await prefs).setString('public_key',publicPem);
+    localLog("saved","public_key len"+publicPem.length.toString()+" :"+publicPem);
+    (await prefs).setString('private_key',privatePem);
+    localLog("saved","private_key len"+privatePem.length.toString()+" :"+privatePem);
     //(await prefs).setString('fingerprint',fingerprint);
 
     getPublicRsaKeys();
