@@ -3,14 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:truelink/globals.dart' as globals;
 import 'package:truelink/localization/custom_localizations.dart';
 
-import 'package:truelink/screens/stored_object_browser_screen.dart';
+import 'package:truelink/screens/trx_browser_screen.dart';
 
-class ObjectBrowserButton extends StatefulWidget {
+class TrxBrowserButton extends StatefulWidget {
   @override
-  _ObjectBrowserButton createState() => _ObjectBrowserButton();
+  _TrxBrowserButton createState() => _TrxBrowserButton();
 }
 
-class _ObjectBrowserButton extends State<ObjectBrowserButton> {
+class _TrxBrowserButton extends State<TrxBrowserButton> {
   bool publicKeyPresent = false;
 
   String fingerPrint;
@@ -20,10 +20,10 @@ class _ObjectBrowserButton extends State<ObjectBrowserButton> {
     super.initState();
   }
 
-  static Future<void> buttonStoredObjectAction(BuildContext context) async {
+  static Future<void> buttonTrxAction(BuildContext context) async {
     Navigator.of(context).push(
       CupertinoPageRoute<void>(
-          title: "", builder: (BuildContext context) => StoredObjectsScreen(title:CustomLocalizations.of(context).chooserObjectBrowser)),
+          title: "", builder: (BuildContext context) => TrxBrowserScreen(title:CustomLocalizations.of(context).chooserTrxBrowser)),
     );
   }
 
@@ -33,8 +33,8 @@ class _ObjectBrowserButton extends State<ObjectBrowserButton> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
-        key: Key('__chooseform_objbrowsertn__'),
-        onTap: () => globals.rsaPrivateKey!=null?buttonStoredObjectAction(context):{},
+        key: Key('__chooseform_trxbtn__'),
+        onTap: () => globals.rsaPrivateKey!=null?buttonTrxAction(context):{},
         child: Container(
           width: 200.0,
           height: 40.0,
@@ -45,7 +45,7 @@ class _ObjectBrowserButton extends State<ObjectBrowserButton> {
           ),
           child: Center(
             child: Text(
-                 CustomLocalizations.of(context).chooserObjectBrowser,
+                 CustomLocalizations.of(context).chooserTrxBrowser,
                 style: globals.rsaPrivateKey!=null?globals.isaTextStyleBoldBlueVeryBig:globals.isaTextStyleBoldWhiteBig),
           ),
         ),

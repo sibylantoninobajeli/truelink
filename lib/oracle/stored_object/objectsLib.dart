@@ -7,7 +7,7 @@ import 'package:truelink/models/stored_object.dart';
 import 'package:truelink/oracle/crypto.dart';
 import 'package:truelink/globals.dart' as globals;
 import 'package:crypto/crypto.dart';
-import 'package:truelink/screens/stored_object_viewer.dart';
+import 'package:truelink/screens/stored_object_viewer_screen.dart';
 
 class ObjectsAPI {
   static final tenancyId =

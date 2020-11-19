@@ -5,6 +5,7 @@ CustomLocalizationsBaseClass(this.locale);
 final Locale locale;
   String get title {return static_loc.localizedValues[locale.languageCode]['title']; }
   String get chooserProductCheckMex {return static_loc.localizedValues[locale.languageCode]['chooserProductCheckMex']; }
+  String get chooserTrxBrowser {return static_loc.localizedValues[locale.languageCode]['chooserTrxBrowser']; }
   String get chooserObjectBrowser {return static_loc.localizedValues[locale.languageCode]['chooserObjectBrowser']; }
   String get chooserProductPictureMex {return static_loc.localizedValues[locale.languageCode]['chooserProductPictureMex']; }
   String get chooserKeyGenMex {return static_loc.localizedValues[locale.languageCode]['chooserKeyGenMex']; }

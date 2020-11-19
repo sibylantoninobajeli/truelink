@@ -36,9 +36,20 @@ String languageCode;
 //const String testEndPoint = "http://192.168.10.25:8000"; //for DEBUG mode
 const String prodEndPoint = "https://infoscuolapp.appspot.com"; //for RELEASE
 
-const blockchainEndPointHost = "blockchain.eu-frankfurt-1.oci.oraclecloud.com";
+
+
+//const blockchainEndPointHost = "blockchain.eu-frankfurt-1.oci.oraclecloud.com";
+const blockchainEndPointHost = "sibylfounder-sibylit-fra.blockchain.ocp.oraclecloud.com";
+
 
 const objectEndPointHost = "objectstorage.eu-frankfurt-1.oraclecloud.com";
+//                            sibylfounder-sibylit-fra.blockchain.ocp.oraclecloud.com:7443/restproxy/bcsgw/rest/v1/transaction/invocation
+
+
+const tenancyId="ocid1.tenancy.oc1..aaaaaaaaim3faii6ffmkujfczxiz6e4ezw5ogmj4ftqwosi7tyw4fstdkitq";
+const authUserId="ocid1.user.oc1..aaaaaaaaxofkollklmasvqzvycdjw5wpx47dlk3kfqz2n63ygrpdby3dysdq";
+
+
 
 
 

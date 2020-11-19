@@ -2,11 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:truelink/buttons/check_public_key_btn.dart';
 import 'package:truelink/buttons/object_browser_btn.dart';
+import 'package:truelink/buttons/trx_browser_btn.dart';
 import 'package:truelink/globals.dart' as globals;
 import 'package:truelink/localization/custom_localizations.dart';
 import 'package:camera/camera.dart';
-import 'package:truelink/screens/take_picture.dart';
-import 'package:truelink/screens/product_check.dart';
+import 'package:truelink/screens/take_picture_sccreen.dart';
+import 'package:truelink/screens/product_check_screen.dart';
 
 import '../internalnotification_subscription.dart';
 
@@ -80,7 +81,7 @@ implements InternalNotificationListener{
           ),
           Center(
             child: Container(
-              padding: const EdgeInsets.only(top: 450.0),
+              padding: const EdgeInsets.only(top: 350.0),
               child: Form(
                 key: formKey,
                 child:
@@ -132,7 +133,8 @@ implements InternalNotificationListener{
                     ),
 
                     BtnCheckKey(),
-                    ObjectBrowserButton()
+                    ObjectBrowserButton(),
+                    TrxBrowserButton()
 
                   ],
                 ),

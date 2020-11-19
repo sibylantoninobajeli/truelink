@@ -2,6 +2,7 @@ library insofoscuolapp.static_localizations;
 final Map<String, Map<String, String>> localizedValues = {
 'it': {
 'title': "TrueLink",
+  'chooserTrxBrowser':"Esplora transazioni",
   'chooserObjectBrowser':"Esplora documenti",
   'chooserProductCheckMex': "Verifica prodotto",
   'chooserProductPictureMex': "Scatta foto",
@@ -15,6 +16,7 @@ final Map<String, Map<String, String>> localizedValues = {
 ,
 'en': {
 'title': "TrueLink",
+  'chooserTrxBrowser':"Transactions browser",
   'chooserObjectBrowser':"Object browser",
   'chooserProductCheckMex': "Product verify",
   'chooserProductPictureMex': "Take a picture",

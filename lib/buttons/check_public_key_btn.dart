@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:truelink/globals.dart' as globals;
 import 'package:truelink/localization/custom_localizations.dart';
 import 'package:truelink/oracle/stored_object/objectsLib.dart';
-import '../screens/key_generator.dart';
+import '../screens/key_generator_screen.dart';
 
 class BtnCheckKey extends StatefulWidget {
   BtnCheckKey();

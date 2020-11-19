@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:truelink/screens/home.dart';
-import 'package:truelink/screens/product_check.dart';
+import 'package:truelink/screens/home_screen.dart';
+import 'package:truelink/screens/product_check_screen.dart';
 import 'globals.dart' as globals;
 import 'package:truelink/screens/intro/intro.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

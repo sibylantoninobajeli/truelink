@@ -5,7 +5,7 @@ import 'dart:ui';
 import 'package:truelink/localization/custom_localizations.dart';
 import 'package:truelink/screens/auth/regstr_scr1_mail_switch.dart';
 import 'package:flutter/services.dart';
-import '../home.dart';
+import '../home_screen.dart';
 import 'page_selector.dart';
 
 /// A widget connecting its life cycle to a [VideoPlayerController] using
