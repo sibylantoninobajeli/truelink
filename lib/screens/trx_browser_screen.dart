@@ -72,11 +72,9 @@ class TrxBrowserScreenState extends State<TrxBrowserScreen> {
     hostHeader="host: "+globals.blockchainEndPointHost;
 
 
-    //sig = "iro/BGeKEwX4miFoHRXqIVNPLUnvulwnTMZozhikz8X9IRJ4FoodZTCy/1SvEvJdhfR97Q23KEsEoxhQGfn2MYFS8UnIVkiZ9tl5dq+GlxbjFRGfT8q75Vc/Aciqvj1/nyazAKME8d8fcWz8OlYPXrTgiemKCgwK2WTihlf/6ungburfuB1E3jL5jFXqEwO2BUamfm6+EzDudj6a1QRxtYg5zvllNr+9gQUathlXlmbIhDsU753DoxC4BnLtAIiHcoyGbhcpj+k8cu1cn1KyGc8AXN9hQvxDqDRzWcpMsAA/uUOlM2+6aQP8kuC2bJm9PDiqbog+vhZLNV9aaks1EQ==";
+    //callAPIVersion();
 
-    callAPIVersion();
-
-    callAPITransactions();
+    callAPITransactions2();
   }
 
   callAPIVersion() async {
@@ -116,6 +114,29 @@ class TrxBrowserScreenState extends State<TrxBrowserScreen> {
     globals.localLog("storage call uri", uri.toString());
     globals.localLog("storage call aut", authStr.toString());
     var response = await http.get(uri,headers: reqheaders);
+    globals.localLog("storage call", response.reasonPhrase);
+    globals.localLog("storage call", response.body);
+    final JsonDecoder _decoder = new JsonDecoder();
+  }
+
+
+  callAPITransactions2() async {
+    final target=":7443/restproxy/bcsgw/rest/v1/transaction/query";
+    uri = Uri.parse("https://"+globals.blockchainEndPointHost+target);
+    final requestTarget="(request-target): "+method.toLowerCase()+" "+target;
+    signingString="$requestTarget\n$dateHeader\n$hostHeader";
+    sig = sign(Uint8List.fromList(signingString.codeUnits), globals.rsaPrivateKey);
+
+
+
+    String authStr="Signature version=\"$sigVersion\",keyId=\"$keyId\",algorithm=\"$alg\",headers=\"$headers\",signature=\"$sig\"";
+
+    authStr='Basic ' + base64Encode(utf8.encode('antonino.bajeli@sibyl.it:Oraclecloudino@7'));
+    Map<String,String> reqheaders={'content-type': 'application/json','accept': 'application/json', "date":datenow,"host":globals.blockchainEndPointHost,"Authorization":authStr };
+    globals.localLog("storage call uri", uri.toString());
+    globals.localLog("storage call aut", authStr.toString());
+    var response = await http.post(uri,headers: reqheaders,body: '{"channel": "default", "ChaincodeID": "obcs-cardealer","ChaincodeVer": "v0", "Fcn": "queryVehiclePartByOwner","args": ["mercedes"]}');
+
     globals.localLog("storage call", response.reasonPhrase);
     globals.localLog("storage call", response.body);
     final JsonDecoder _decoder = new JsonDecoder();
