@@ -57,6 +57,12 @@ const String testDevice = 'YOUR_DEVICE_ID';
 final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
 const bool isDev = !isRelease;
 
+final Image bkgImg = new Image(
+  image: new AssetImage("assets/truelink_logo.png"),
+  fit: BoxFit.none,
+  color: Colors.white70,
+  colorBlendMode: BlendMode.dstOut,
+);
 
 
 

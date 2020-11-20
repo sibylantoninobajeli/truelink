@@ -54,11 +54,17 @@ class _BtnCheckKey extends State<BtnCheckKey> {
             borderRadius: BorderRadius.circular(26 / 1.5),
           ),
           child: Center(
-            child: Text(
+            child: Column(children: [Text(
                 (publicKeyPresent
-                    ? CustomLocalizations.of(context).chooserRegenMex+"\n"+ObjectsAPI.getCurrentPrivateKeyFingerprint()
+                    ? CustomLocalizations.of(context).chooserRegenMex
                     : CustomLocalizations.of(context).chooserKeyGenMex),
                 style: globals.isaTextStyleBoldBlueVeryBig),
+              Text(
+                  (publicKeyPresent
+                      ? ObjectsAPI.getCurrentPrivateKeyFingerprint()
+                      : Container()),
+                  style: globals.isaTextStyleBoldBlueSmall),
+            ],)
           ),
         ),
       ),

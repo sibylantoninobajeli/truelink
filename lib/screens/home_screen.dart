@@ -6,6 +6,7 @@ import 'package:truelink/buttons/trx_browser_btn.dart';
 import 'package:truelink/globals.dart' as globals;
 import 'package:truelink/localization/custom_localizations.dart';
 import 'package:camera/camera.dart';
+import 'package:truelink/screens/menu_drawer.dart';
 import 'package:truelink/screens/take_picture_sccreen.dart';
 import 'package:truelink/screens/product_check_screen.dart';
 
@@ -54,20 +55,28 @@ implements InternalNotificationListener{
     );
   }
 
-  final Image _bkgImg = new Image(
-    image: new AssetImage("assets/truelink_logo.png"),
-    fit: BoxFit.none,
-    color: Colors.white70,
-    colorBlendMode: BlendMode.dstOut,
-  );
+
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
-        appBar: null,
+        drawer: MenuDrawer(),
+        appBar: AppBar(centerTitle:true, title: Text("Truelink example",),
+
+          actions: <Widget>[
+            Padding(
+                padding: EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                  onTap: () {},
+                  child: Icon(
+                      Icons.more_vert
+                  ),
+                )
+            ),
+          ],),
         body: Stack(alignment: AlignmentDirectional.topCenter, children: <Widget>[
-          _bkgImg,
+          globals.bkgImg,
 
           Container(
             padding: const EdgeInsets.only(top: 0.0),
@@ -81,7 +90,7 @@ implements InternalNotificationListener{
           ),
           Center(
             child: Container(
-              padding: const EdgeInsets.only(top: 350.0),
+              padding: const EdgeInsets.only(top: 300.0),
               child: Form(
                 key: formKey,
                 child:
