@@ -62,7 +62,7 @@ class _BtnCheckKey extends State<BtnCheckKey> {
               Text(
                   (publicKeyPresent
                       ? ObjectsAPI.getCurrentPrivateKeyFingerprint()
-                      : Container()),
+                      : ""),
                   style: globals.isaTextStyleBoldBlueSmall),
             ],)
           ),
